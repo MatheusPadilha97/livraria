@@ -2,16 +2,21 @@ from validacoes import validacao, validacao_ISBN, validacao_ano, validacao_preco
 
 class Livraria:
     def __init__(self):
-        self.livros = []             #Estoque de livros 
+        self.livros = []             
 
     def cadastro(self, livro):
         self.livros.append(livro)
 
     def listar(self):
         for livro in self.livros:
-            print(f"\n>>>Cod#{livro.codigo}\nTitulo/Editora: {livro.titulo}/{livro.editora}\n"
-                  f"Categoria: {livro.area}\nAno: {livro.ano}\nValor: R$ {livro.valor:.2f}\n"
-                  f"Estoque: {livro.qtd} unidades\nValor total em estoque: R$ {livro.valor * livro.qtd:.2f}")
+            print(f"\n>>>Cod#{livro.codigo}"
+                  f"\nTitulo/Editora: {livro.titulo}/{livro.editora}"
+                  f"\nCategoria: {livro.area}"
+                  f"\nAno: {livro.ano}"
+                  f"\nValor: R$ {livro.valor:.2f}"
+                  f"\nEstoque: {livro.qtd} unidades"
+                  f"\nValor total em estoque: R$ {livro.valor * livro.qtd:.2f}"
+                  )
 
     def busca_por_nome(self, nome):
         print(f"\nResultados para a sua busca de: {nome}")
@@ -19,9 +24,14 @@ class Livraria:
         for livro in self.livros:
             if livro.titulo.upper() == nome.upper():
                 possui += 1
-                print(f"\n>>>Cod#{livro.codigo}\nTitulo/Editora: {livro.titulo}/{livro.editora}\n"
-                      f"Categoria: {livro.area}\nAno: {livro.ano}\nValor: R$ {livro.valor:.2f}\n"
-                      f"Estoque: {livro.qtd} unidades\nValor total em estoque: R$ {livro.valor * livro.qtd:.2f}")
+                print(f"\n>>>Cod#{livro.codigo}"
+                  f"\nTitulo/Editora: {livro.titulo}/{livro.editora}"
+                  f"\nCategoria: {livro.area}"
+                  f"\nAno: {livro.ano}"
+                  f"\nValor: R$ {livro.valor:.2f}"
+                  f"\nEstoque: {livro.qtd} unidades"
+                  f"\nValor total em estoque: R$ {livro.valor * livro.qtd:.2f}"
+                  )
         if possui == 0:
             print("Sem resultados.")
 
@@ -32,9 +42,14 @@ class Livraria:
         for livro in self.livros:
             if livro.area.upper() == categoria.upper():
                 possui += 1
-                print(f"\n>>>Cod#{livro.codigo}\nTitulo/Editora: {livro.titulo}/{livro.editora}\n"
-                      f"Categoria: {livro.area}\nAno: {livro.ano}\nValor: R$ {livro.valor:.2f}\n"
-                      f"Estoque: {livro.qtd} unidades\nValor total em estoque: R$ {livro.valor * livro.qtd:.2f}")
+                print(f"\n>>>Cod#{livro.codigo}"
+                  f"\nTitulo/Editora: {livro.titulo}/{livro.editora}"
+                  f"\nCategoria: {livro.area}"
+                  f"\nAno: {livro.ano}"
+                  f"\nValor: R$ {livro.valor:.2f}"
+                  f"\nEstoque: {livro.qtd} unidades"
+                  f"\nValor total em estoque: R$ {livro.valor * livro.qtd:.2f}"
+                  )
         if possui == 0:
             print("Sem resultados.")
 
@@ -45,9 +60,14 @@ class Livraria:
         for livro in self.livros:
             if livro.valor < valor:
                 possui += 1
-                print(f"\n>>>Cod#{livro.codigo}\nTitulo/Editora: {livro.titulo}/{livro.editora}\n"
-                      f"Categoria: {livro.area}\nAno: {livro.ano}\nValor: R$ {livro.valor:.2f}\n"
-                      f"Estoque: {livro.qtd} unidades\nValor total em estoque: R$ {livro.valor * livro.qtd:.2f}")
+                print(f"\n>>>Cod#{livro.codigo}"
+                  f"\nTitulo/Editora: {livro.titulo}/{livro.editora}"
+                  f"\nCategoria: {livro.area}"
+                  f"\nAno: {livro.ano}"
+                  f"\nValor: R$ {livro.valor:.2f}"
+                  f"\nEstoque: {livro.qtd} unidades"
+                  f"\nValor total em estoque: R$ {livro.valor * livro.qtd:.2f}"
+                  )
         if possui == 0:
             print("Sem resultados.")
 
@@ -58,9 +78,14 @@ class Livraria:
         for livro in self.livros:
             if livro.qtd > estoque:
                 possui += 1
-                print(f"\n>>>Cod#{livro.codigo}\nTitulo/Editora: {livro.titulo}/{livro.editora}\n"
-                      f"Categoria: {livro.area}\nAno: {livro.ano}\nValor: R$ {livro.valor:.2f}\n"
-                      f"Estoque: {livro.qtd} unidades\nValor total em estoque: R$ {livro.valor * livro.qtd:.2f}")
+                print(f"\n>>>Cod#{livro.codigo}"
+                  f"\nTitulo/Editora: {livro.titulo}/{livro.editora}"
+                  f"\nCategoria: {livro.area}"
+                  f"\nAno: {livro.ano}"
+                  f"\nValor: R$ {livro.valor:.2f}"
+                  f"\nEstoque: {livro.qtd} unidades"
+                  f"\nValor total em estoque: R$ {livro.valor * livro.qtd:.2f}"
+                  )
         if possui == 0:
             print("Sem resultados.")
 
@@ -99,14 +124,18 @@ class Livraria:
                     livro = Livro(titulo, codigo, editora, categoria, ano, preco, int(quantidade))
                     livraria.cadastro(livro)
                 else:
-                    print(f"Livro {livro}não cadastrado.\nVerificar erro especificado acima.")
+                    print(f"Livro {livro}não cadastrado."
+                          "\nVerificar erro especificado acima.")
 
     def atualiza_csv(self):
         with open('db.csv', 'w') as estoque:
             for livro in self.livros:
-                linha = ",".join([livro.codigo, livro.titulo, 
-                                  livro.ano, livro.area, livro.editora,
-                                  f"{livro.valor:.2f}", str(livro.qtd),"\n"]
+                linha = ",".join([livro.codigo,
+                                 livro.titulo, 
+                                 livro.ano,
+                                 livro.area,
+                                 livro.editora,
+                                 f"{livro.valor:.2f}", str(livro.qtd),"\n"]
                                 )
                 estoque.write(linha)
 
@@ -132,7 +161,6 @@ class Filial(Livraria):
     
 
 if __name__ == '__main__':
-    # import datetime as dt
 
     livraria = Livraria()
     filiais = []
