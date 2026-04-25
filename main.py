@@ -1,4 +1,4 @@
-from validacoes import validacao, validacao_ISBN, validacao_ano, validacao_preco, validacao_qtd, validacao_vazio
+from validacoes import validacao, validacao_ISBN, validacao_ano, validacao_preco, validacao_qtd, validacao_vazio, validacao_filial
 
 class Livraria:
     def __init__(self):
@@ -131,21 +131,28 @@ class Filial(Livraria):
         self.contato = contato
     
 
-
 if __name__ == '__main__':
     # import datetime as dt
 
-    livraria = None
+    livraria = Livraria()
     filiais = []
 
     flag_sistema = True
 
     while flag_sistema != False:
         print("\n-LIVRO STORE-\n")
-        menu = input(
-            "-Início-\nDigite a opção desejada:\n1-Cadastrar novo livro\n2-Listar livros\n3-Buscar livros por nome\n"
-            "4-Buscar livros por categoria\n5-Buscar livros por preço\n6-Busca por quantidade em estoque\n7-Valor total no estoque"
-            "\n8-Carregar estoque\n9-Atualizar arquivo de estoque\n0-Encerrar atividades\n\n").strip()
+        menu = input("-Início-\nDigite a opção desejada:"
+                     "\n1-Cadastrar novo livro"
+                     "\n2-Listar livros"
+                     "\n3-Buscar livros por nome"
+                     "\n4-Buscar livros por categoria"
+                     "\n5-Buscar livros por preço"
+                     "\n6-Busca por quantidade em estoque"
+                     "\n7-Valor total no estoque"
+                     "\n8-Carregar estoque"
+                     "\n9-Atualizar arquivo de estoque"
+                     "\n10-Cadastrar nova filial"
+                     "\n0-Encerrar atividades\n\n").strip()
 
         check = validacao(menu)                                         #Validação da entrada/seleção opção menu.
 
@@ -190,7 +197,6 @@ if __name__ == '__main__':
                 else: 
                    print("\nDigite novamente.")
             
-
             flag_ano = True                                            #Flag e Loop para validação do ano.
             while flag_ano:
                 ano = input("\nDigite o ano de lançamento do livro: ").strip()
@@ -200,7 +206,6 @@ if __name__ == '__main__':
                 else:
                     print("\nDigite novamente.")
 
-            
             flag_preco = True                                          #Flag e Loop para validação do preço.
             while flag_preco:
                 preco = input("\nDigite o preço unitário do livro: ").replace(",", ".")
@@ -211,7 +216,6 @@ if __name__ == '__main__':
                 else:
                     print("\nDigite novamente.")
                 
-            
             flag_qtd = True                                            #Flag e Loop para validação da quantidade.
             while flag_qtd:
                 quantidade = input("\nDigite a quantidade de livros: ")
@@ -222,10 +226,30 @@ if __name__ == '__main__':
                 else:
                     print("\nDigite novamente.")
                 
-
-            livro = Livro(titulo, codigo, editora, categoria, ano, preco, quantidade)
-            livraria.cadastro(livro)
-            print("\nLivro cadastrado com sucesso!\n")
+            flag_filial = True
+            while flag_filial:
+                filial_livro = input("\nDigite o código da filial onde o livro será cadastrado: ").strip()
+                verificacao = validacao_filial(filial_livro, filiais)
+                if verificacao:
+                    flag_filial = False
+                else:
+                    print("\nFilial não encontrada. Digite novamente.")
+                            
+            for filial in filiais:
+                if filial.codigo == filial_livro:
+                    filial.cadastro(Livro(titulo,
+                                          codigo,
+                                          editora,
+                                          categoria,
+                                          ano,
+                                          preco,
+                                          quantidade)
+                                    )
+                    print(f"\nLivro cadastrado com sucesso na filial {filial.nome}!\n")
+                    
+            # livro = Livro(titulo, codigo, editora, categoria, ano, preco, quantidade)
+            # livraria.cadastro(livro)
+            # print("\nLivro cadastrado com sucesso!\n")
 
 
         if check and menu == "2":                            #Listagem de livros cadastrados.
@@ -268,6 +292,16 @@ if __name__ == '__main__':
             print("\n--Atualizar arquivo de estoque--\n")
             livraria.atualiza_csv()
             print("\nAlterações salvas com sucesso!\n")
+
+        if check and menu == "10":                              # Cria a filial e adiciona na lista atual de filiais
+            print("\n--Cadastro de filial--\n")
+            codigo = input("\nDigite o código da filial: ").strip()
+            nome = input("\nDigite o nome da filial: ").strip()
+            endereco = input("\nDigite o endereço da filial: ").strip()
+            contato = input("\nDigite o contato/telefone da filial: ").strip()
+            filial = Filial(codigo, nome, endereco, contato)
+            filiais.append(filial)
+            print("\nFilial cadastrada com sucesso!\n")
 
         if check and menu == "0":                             # Fechar sistema e verifica se deseja salvar alterações
             flag_encerramento = True

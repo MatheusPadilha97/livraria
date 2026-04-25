@@ -1,7 +1,7 @@
 import datetime as dt
 
 def validacao(opcao):                                                 #Validacão da opção selecionada no menu.
-    if opcao not in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]:
+    if opcao not in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9","10"]:
         return False
     else:
         return True
@@ -70,3 +70,13 @@ def validacao_vazio(valor):
     else:
         print("\nValor vazio, inválido!")
         return False
+    
+
+def validacao_filial(codigo, filiais):
+    for filial in filiais:
+        if filial.codigo == codigo:
+            return True
+        else:
+            return False
+
+                                                
