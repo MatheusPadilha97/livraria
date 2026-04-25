@@ -151,7 +151,14 @@ class Livraria:
                     check_qtd = validacao_qtd(quantidade)
                     if (check_cod and check_ano and check_preco and check_qtd):
                         livro = [titulo, codigo, editora, categoria, ano, preco, quantidade]
-                        filial.cadastro(Livro(titulo, codigo, editora, categoria, ano, preco, int(quantidade)))
+                        filial.cadastro(Livro(titulo,
+                                              codigo,
+                                              editora,
+                                              categoria,
+                                              ano, preco,
+                                              int(quantidade)
+                                              )
+                                        )
                     else:
                         print(f"Livro {livro}não cadastrado."
                             "\nVerificar erro especificado acima.")
@@ -213,10 +220,11 @@ if __name__ == '__main__':
                      "\n4-Buscar livros por categoria"
                      "\n5-Buscar livros por preço"
                      "\n6-Busca por quantidade em estoque"
-                     "\n7-Valor total no estoque"
-                     "\n8-Carregar estoque"
-                     "\n9-Atualizar arquivo de estoque"
-                     "\n10-Cadastrar nova filial"
+                     "\n7-Busca por código ISBN (todas as filiais)"
+                     "\n8-Valor total no estoque"
+                     "\n9-Carregar estoque"
+                     "\n10-Atualizar arquivo de estoque"
+                     "\n11-Cadastrar nova filial"
                      "\n0-Encerrar atividades\n\n").strip()
 
         check = validacao(menu)                                         #Validação da entrada/seleção opção menu.
@@ -292,7 +300,7 @@ if __name__ == '__main__':
                     print("\nDigite novamente.")
                 
             flag_filial = True
-            livraria.listar_filiais()                                      #Lista as filiais cadastradas para auxiliar o usuário a escolher a filial correta para cadastro do livro.
+            livraria.listar_filiais()                              #Lista as filiais existentes para o cadastro do livro.
             while flag_filial:
                 filial_livro = input("\nDigite o código da filial onde o livro será cadastrado: ").strip()
                 verificacao = validacao_filial(filial_livro, livraria.filiais)
@@ -321,7 +329,7 @@ if __name__ == '__main__':
                     print("\nFilial não encontrada. Digite novamente.")
 
 
-        if check and menu == "2":                            #Listagem de livros cadastrados.
+        if check and menu == "2":                            #Listagem de livros cadastrado por filial.
                     flag_listagem = True
                     while flag_listagem:
                         print("\n--Lista de livros cadastrados--\n")
@@ -335,7 +343,7 @@ if __name__ == '__main__':
                         else:
                             print("\nFilial não encontrada.")
 
-        if check and menu == "3":                             # Busca por nome/titulo.
+        if check and menu == "3":                             # Busca por nome/titulo individualmente por filial.
             flag_busca = True
             while flag_busca:
                         print("\n--Buscar livros por nome--\n")
@@ -348,7 +356,7 @@ if __name__ == '__main__':
                         else:
                             print("\nFilial não encontrada.")
             
-        if check and menu == "4":                                    # Busca por categoria.
+        if check and menu == "4":                                    # Busca por categoria individualmente por filial.
             flag_busca = True
             while flag_busca:
                 print("\n--Buscar livros por categoria--\n")
@@ -362,7 +370,7 @@ if __name__ == '__main__':
                     print("\nFilial não encontrada.") 
                                                                                                
         if check and menu == "5":   
-            flag_busca = True                                                        # Busca por preço.
+            flag_busca = True                                                        # Busca por preço individualmente por filial.
             while flag_busca:
                 print("\n--Buscar livros com preço menor do que o indicado--\n")
                 codigo_filial = input("\nDigite o código da filial em que deseja realizar a consulta: ").strip()
@@ -375,7 +383,7 @@ if __name__ == '__main__':
                     print("\nFilial não encontrada.")
                         
         if check and menu == "6":  
-            flag_busca = True                                                        # Busca por quantidade no estoque.
+            flag_busca = True                                                        # Busca por quantidade no estoque individualmente por filial.
             while flag_busca:
                 print("\n--Buscar livros com estoque maior do que o indicado--\n")
                 codigo_filial = input("\nDigite o código da filial em que deseja realizar a consulta: ").strip()
@@ -387,7 +395,39 @@ if __name__ == '__main__':
                 else:
                     print("\nFilial não encontrada.")                                                     
             
-        if check and menu == "7":                                             # Consulta valor total do estoque
+        if check and menu == "7":
+            flag_busca = True                                                        # Busca por código ISBN (em todas as filiais).
+            while flag_busca:
+                ocorrencias = []
+                total_estoque = 0
+                print("\n--Buscar livros por código ISBN--\n")
+                codigo_ISBN = input("\nDigite o código ISBN do livro: ").strip()
+                verificacao = validacao_ISBN(codigo_ISBN)
+                if verificacao:
+                    for filial in livraria.filiais:
+                        for livro in filial.livros:
+                            if livro.codigo == codigo_ISBN:
+                                if len(ocorrencias) == 0:
+                                    print(f"\n>>>Cod#{livro.codigo}"
+                                        f"\nTitulo/Editora: {livro.titulo}/{livro.editora}"
+                                        f"\nCategoria: {livro.area}"
+                                        f"\nAno: {livro.ano}")
+                                total_estoque += livro.qtd * livro.valor
+                                ocorrencias.append([livro.valor, filial.nome , livro.qtd])
+
+                if len(ocorrencias) == 0:
+                    print("\nLivro não encontrado.")
+                    flag_busca = False
+                else:
+                    for ocorrencia in ocorrencias:
+                        print(f"Valor: R$ {ocorrencia[0]:.2f}"
+                              f">>>Filial: {ocorrencia[1]},"
+                              f"estoque: {ocorrencia[2]} unidades")
+                        print(f"Valor total em estoque: R$ {total_estoque:.2f}")
+                        flag_busca = False
+                            
+
+        if check and menu == "8":                                             # Consulta valor total do estoque da filial individualmente.
             flag_busca = True                                                       
             while flag_busca:
                 print("\n--Valor total em estoque--\n")
@@ -401,17 +441,17 @@ if __name__ == '__main__':
                 else:
                     print("\nFilial não encontrada.")                                                     
             
-        if check and menu == "8":                             # Carrega produtos cadastrados no estoque CSV
+        if check and menu == "9":                             # Carrega produtos cadastrados no estoque CSV
             print("\n--Carregar estoque--\n")
             livraria.carrega_csv()
             print("\nEstoque carregado com sucesso!\n")
 
-        if check and menu == "9":                             # Salva as novas alterações/cadastros realizados no estoque CSV
+        if check and menu == "10":                             # Salva as novas alterações/cadastros realizados no estoque CSV
             print("\n--Atualizar arquivo de estoque--\n")
             livraria.atualiza_csv()
             print("\nAlterações salvas com sucesso!\n")
 
-        if check and menu == "10":                              # Cria a filial e adiciona na lista atual de filiais
+        if check and menu == "11":                              # Cria a filial e adiciona na lista atual de filiais
             print("\n--Cadastro de filial--\n")
             codigo = input("\nDigite o código da filial: ").strip()
             nome = input("\nDigite o nome da filial: ").strip()

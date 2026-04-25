@@ -1,7 +1,7 @@
 import datetime as dt
 
 def validacao(opcao):                                                 #Validacão da opção selecionada no menu.
-    if opcao not in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9","10"]:
+    if opcao not in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9","10", "11"]:
         return False
     else:
         return True
