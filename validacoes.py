@@ -76,7 +76,27 @@ def validacao_filial(codigo, filiais):
     for filial in filiais:
         if filial.codigo == codigo:
             return True
-        else:
-            return False
+    return False
 
-                                                
+def validacao_livro(codigo, livros):
+    for livro in livros:
+        if livro.codigo == codigo:
+            return True
+    return False
+        
+def duplicidade_livro(codigo, titulo, livros):
+    check = True
+    for livro in livros:
+        if livro.codigo == codigo or livro.titulo == titulo:
+            check = False
+    return check
+
+def voltar():
+    while True:
+        resposta = input("\nDeseja voltar ao menu principal? (S/N): ").strip().upper()
+        if resposta == "S":
+            return True
+        elif resposta == "N":
+            return False
+        else:
+            print("\nResposta inválida. Digite 'S' para sim ou 'N' para não.")
