@@ -100,3 +100,25 @@ def voltar():
             return False
         else:
             print("\nResposta inválida. Digite 'S' para sim ou 'N' para não.")
+
+def valida_codigo_filial(codigo):
+    try:
+        float(codigo)
+        verificacao = validacao_num(codigo)
+        if verificacao and len(codigo) == 2:
+            return True
+    except ValueError:
+        print("\nA entrada deve ser numérica e conter apenas dois digitos.")
+        return False
+
+def valida_telefone_filial(telefone):
+    try:
+        int(telefone)
+        if len(telefone) == 10 or len(telefone) == 11:
+            return True
+        else:
+            print("\nO número de telefone deve conter 10 ou 11 dígitos.")
+            return False
+    except ValueError:
+        print("\nA entrada deve ser numérica.")
+        return False

@@ -1,4 +1,8 @@
-from validacoes import validacao, validacao_ISBN, validacao_ano, validacao_preco, validacao_qtd, validacao_vazio, validacao_filial, duplicidade_livro, voltar
+from validacoes import (
+    validacao, validacao_ISBN, validacao_ano,
+    validacao_preco, validacao_qtd, validacao_vazio,
+    validacao_filial, duplicidade_livro, voltar,
+    valida_codigo_filial, valida_telefone_filial)
 
 class Livraria:
     def __init__(self):
@@ -248,9 +252,19 @@ if __name__ == '__main__':
                 codigo = input("\nDigite o código do livro: ").strip()
                 verificacao = validacao_ISBN(codigo)
                 if verificacao:
-                    flag_codigo = False
+                    flag_conflito = False
+                    for filial in livraria.filiais:
+                            for livro in filial.livros:
+                                if (livro.codigo != codigo and \
+                                    livro.titulo.upper() == titulo.upper()):
+                                        print(f"\nLivro já cadastrado, o ISBN correto é {livro.codigo}."
+                                               " Digite novamente.")
+                                        flag_conflito = True
+                    if not flag_conflito:
+                        flag_codigo = False
                 else: 
                     print("\nDigite novamente.")
+
 
             flag_editora = True
             while flag_editora:
@@ -333,6 +347,7 @@ if __name__ == '__main__':
                     flag_listagem = True
                     while flag_listagem:
                         print("\n--Lista de livros cadastrados--\n")
+                        livraria.listar_filiais()   
                         codigo_filial = input("\nDigite o código da filial em que deseja realizar a consulta: ").strip()
                         verificacao = validacao_filial(codigo_filial, livraria.filiais)
                         if verificacao:
@@ -347,6 +362,7 @@ if __name__ == '__main__':
             flag_busca = True
             while flag_busca:
                         print("\n--Buscar livros por nome--\n")
+                        livraria.listar_filiais()   
                         codigo_filial = input("\nDigite o código da filial em que deseja realizar a consulta: ").strip()
                         verificacao = validacao_filial(codigo_filial, livraria.filiais)
                         if verificacao:
@@ -360,6 +376,7 @@ if __name__ == '__main__':
             flag_busca = True
             while flag_busca:
                 print("\n--Buscar livros por categoria--\n")
+                livraria.listar_filiais()   
                 codigo_filial = input("\nDigite o código da filial em que deseja realizar a consulta: ").strip()
                 verificacao = validacao_filial(codigo_filial, livraria.filiais)
                 if verificacao:
@@ -373,6 +390,7 @@ if __name__ == '__main__':
             flag_busca = True                                                        # Busca por preço individualmente por filial.
             while flag_busca:
                 print("\n--Buscar livros com preço menor do que o indicado--\n")
+                livraria.listar_filiais()   
                 codigo_filial = input("\nDigite o código da filial em que deseja realizar a consulta: ").strip()
                 verificacao = validacao_filial(codigo_filial, livraria.filiais)
                 if verificacao:
@@ -386,6 +404,7 @@ if __name__ == '__main__':
             flag_busca = True                                                        # Busca por quantidade no estoque individualmente por filial.
             while flag_busca:
                 print("\n--Buscar livros com estoque maior do que o indicado--\n")
+                livraria.listar_filiais()   
                 codigo_filial = input("\nDigite o código da filial em que deseja realizar a consulta: ").strip()
                 verificacao = validacao_filial(codigo_filial, livraria.filiais)
                 if verificacao:
@@ -431,6 +450,7 @@ if __name__ == '__main__':
             flag_busca = True                                                       
             while flag_busca:
                 print("\n--Valor total em estoque--\n")
+                livraria.listar_filiais()   
                 codigo_filial = input("\nDigite o código da filial em que deseja realizar a consulta: ").strip()
                 verificacao = validacao_filial(codigo_filial, livraria.filiais)
                 if verificacao:
@@ -453,10 +473,40 @@ if __name__ == '__main__':
 
         if check and menu == "11":                              # Cria a filial e adiciona na lista atual de filiais
             print("\n--Cadastro de filial--\n")
-            codigo = input("\nDigite o código da filial: ").strip()
-            nome = input("\nDigite o nome da filial: ").strip()
-            endereco = input("\nDigite o endereço da filial: ").strip()
-            contato = input("\nDigite o contato/telefone da filial: ").strip()
+            livraria.listar_filiais()   
+            
+            flag_codigo = True
+            while flag_codigo:
+                codigo = input("\nDigite o código da filial: ").strip()
+                verificacao = valida_codigo_filial(codigo)
+                if verificacao:
+                    flag_codigo = False
+            
+            flag_nome = True
+            while flag_nome:
+                nome = input("\nDigite o nome da filial: ").strip()
+                verificacao = validacao_vazio(nome)
+                if verificacao:
+                    flag_nome = False
+                else: 
+                    print("\nDigite novamente.")
+
+            flag_endereco = True
+            while flag_endereco:
+                 endereco = input("\nDigite o endereço da filial: ").strip()
+                 verificacao = validacao_vazio(endereco)
+                 if verificacao:
+                    flag_endereco = False
+                 else: 
+                    print("\nDigite novamente.")        
+            
+            flag_telefone = True
+            while flag_telefone:
+                contato = input("\nDigite o contato/telefone da filial: ").strip()
+                verificacao = valida_telefone_filial(contato)
+                if verificacao:
+                    flag_telefone = False
+
             filial = Filial(codigo, nome, endereco, contato)
             livraria.filiais.append(filial)
             print("\nFilial cadastrada com sucesso!\n")
