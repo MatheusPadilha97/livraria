@@ -41,8 +41,7 @@ class Livraria:
     def busca_por_nome(self, nome):
         print(f"\nResultados para a sua busca de: {nome}")
         possui = 0
-        for filial in self.filiais:
-            for livro in filial.livros:
+        for livro in self.livros:
                 if livro.titulo.upper() == nome.upper():
                     possui += 1
                     print(f"\n>>>Cod#{livro.codigo}"
@@ -56,12 +55,10 @@ class Livraria:
         if possui == 0:
             print("\nSem resultados.")
 
-
     def busca_categoria(self, categoria):
         print(f"\nResultados para a sua busca na categoria: {categoria}")
         possui = 0
-        for filial in self.filiais:
-            for livro in filial.livros:
+        for livro in filial.livros:
                 if livro.area.upper() == categoria.upper():
                     possui += 1
                     print(f"\n>>>Cod#{livro.codigo}"
@@ -75,12 +72,10 @@ class Livraria:
         if possui == 0:
             print("\nSem resultados.")
 
-
     def busca_valor(self, valor):
         print(f"\nResultados para a sua busca por valor menor que: R${valor:.2f}")
         possui = 0
-        for filial in self.filiais:
-            for livro in filial.livros:
+        for livro in filial.livros:
                 if livro.valor < valor:
                     possui += 1
                     print(f"\n>>>Cod#{livro.codigo}"
@@ -94,12 +89,10 @@ class Livraria:
         if possui == 0:
             print("Sem resultados.")
 
-
     def busca_estoque(self, estoque):
         print(f"\nResultados para a sua busca por estoque maior do que: {estoque}un.")
         possui = 0
-        for filial in self.filiais:
-            for livro in filial.livros:
+        for livro in filial.livros:
                 if livro.qtd > estoque:
                     possui += 1
                     print(f"\n>>>Cod#{livro.codigo}"
@@ -112,8 +105,7 @@ class Livraria:
                     )
         if possui == 0:
             print("Sem resultados.")
-
-
+            
     def total_estoque(self):
         unidades = 0
         valor_total = 0
@@ -125,7 +117,6 @@ class Livraria:
         else:
             print(f"\nValor total em estoque R$ {valor_total:.2f}"
                  f"\nQuantidade total de livros em estoque: {unidades}un.")
-
 
     def carrega_csv(self):
         self.filiais = []         #Limpa a lista de filiais para evitar duplicidade.
@@ -367,7 +358,9 @@ if __name__ == '__main__':
                         verificacao = validacao_filial(codigo_filial, livraria.filiais)
                         if verificacao:
                             nome = input("\nDigite o nome/título do livro: ").strip()
-                            livraria.busca_por_nome(nome)
+                            for filial in livraria.filiais:
+                                if filial.codigo == codigo_filial:
+                                    filial.busca_por_nome(nome)
                             flag_busca = False
                         else:
                             print("\nFilial não encontrada.")
@@ -381,7 +374,9 @@ if __name__ == '__main__':
                 verificacao = validacao_filial(codigo_filial, livraria.filiais)
                 if verificacao:
                     categoria = input("\nDigite a categoria desejada: ").strip()
-                    livraria.busca_categoria(categoria)
+                    for filial in livraria.filiais:
+                        if filial.codigo == codigo_filial:
+                            filial.busca_categoria(categoria)
                     flag_busca = False
                 else:
                     print("\nFilial não encontrada.") 
@@ -395,7 +390,9 @@ if __name__ == '__main__':
                 verificacao = validacao_filial(codigo_filial, livraria.filiais)
                 if verificacao:
                     valor = float(input("\nDigite o preço acima do que deseja: ").strip())
-                    livraria.busca_valor(valor)
+                    for filial in livraria.filiais:
+                        if filial.codigo == codigo_filial:
+                            filial.busca_valor(valor)
                     flag_busca = False
                 else:
                     print("\nFilial não encontrada.")
@@ -409,7 +406,9 @@ if __name__ == '__main__':
                 verificacao = validacao_filial(codigo_filial, livraria.filiais)
                 if verificacao:
                     estoque = int(input("\nDigite o estoque abaixo do que deseja: ").strip())
-                    livraria.busca_estoque(estoque)
+                    for filial in livraria.filiais:
+                        if filial.codigo == codigo_filial:
+                            filial.busca_estoque(estoque)
                     flag_busca = False
                 else:
                     print("\nFilial não encontrada.")                                                     
@@ -440,10 +439,10 @@ if __name__ == '__main__':
                 else:
                     for ocorrencia in ocorrencias:
                         print(f"Valor: R$ {ocorrencia[0]:.2f}"
-                              f">>>Filial: {ocorrencia[1]},"
-                              f"estoque: {ocorrencia[2]} unidades")
-                        print(f"Valor total em estoque: R$ {total_estoque:.2f}")
-                        flag_busca = False
+                              f" >>> Filial: {ocorrencia[1]},"
+                              f" estoque: {ocorrencia[2]} unidades")
+                    print(f"Valor total em estoque: R$ {total_estoque:.2f}")
+                    flag_busca = False
                             
 
         if check and menu == "8":                                             # Consulta valor total do estoque da filial individualmente.
